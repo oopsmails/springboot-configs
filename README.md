@@ -34,10 +34,22 @@ eureka:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
 
 Eureka: http://localhost:8761/eureka/
+
 Zuul: http://localhost:8762/routes
+
 Request: http://localhost:8762/spring-cloud-eureka-client/greeting
 
+--> Thinkings:
 
+http://localhost:8081/greeting is also working!
+
+This should be solve by firewall.
+
+https://stackoverflow.com/questions/41262716/dont-allow-direct-calls-to-microservices-only-allow-through-api-gateway
+
+Assuming that you have a firewall in place, you could restrict inbound traffic to server to the ports that your Zuul endpoints are exposed on and disallow anyone from accessing the microservices' ports directly.
+
+If you want to avoid going the firewall route, you could force the endpoints to check for a specific HTTP header or something that is set by Zuul prior to forwarding a request, but that would be hacky and easy to circumvent. Based on my past experiences, the "right" way would be to do this via a firewall. Your app should be responsible for dealing with requests. Your firewall should be responsible for deciding who can hit specific endpoints.
 
 ====>
 
