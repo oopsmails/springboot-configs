@@ -33,6 +33,12 @@ eureka:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
 
+Eureka: http://localhost:8761/eureka/
+Zuul: http://localhost:8762/routes
+Request: http://localhost:8762/spring-cloud-eureka-client/greeting
+
+
+
 ====>
 
 
