@@ -5,10 +5,10 @@ Spring boot and cloud configurations, microservices
 
 https://howtodoinjava.com/spring/spring-cloud/spring-cloud-config-server-git/ --> Thanks!
 
-http://localhost:8080/msg
-http://localhost:8888/config-server-client/development
-http://localhost:8888/config-server-client/production
-http://localhost:8080/refresh --> POST
+http://localhost:8080/msg 
+http://localhost:8888/config-server-client/development 
+http://localhost:8888/config-server-client/production 
+http://localhost:8080/refresh --> POST 
 
 example local repo files, see springboot-configs\config-server-repo
 
@@ -48,7 +48,7 @@ http://localhost:8081/greeting is also working!
 
 This should be solve by firewall.
 
-https://stackoverflow.com/questions/41262716/dont-allow-direct-calls-to-microservices-only-allow-through-api-gateway
+https://stackoverflow.com/questions/41262716/dont-allow-direct-calls-to-microservices-only-allow-through-api-gateway 
 
 Assuming that you have a firewall in place, you could restrict inbound traffic to server to the ports that your Zuul endpoints are exposed on and disallow anyone from accessing the microservices' ports directly.
 
@@ -58,12 +58,12 @@ If you want to avoid going the firewall route, you could force the endpoints to 
 
 https://piotrminkowski.wordpress.com/2017/02/05/part-1-creating-microservice-using-spring-cloud-eureka-and-zuul/ 
 
-Zuul –  gateway service that provides dynamic routing, monitoring, resiliency, security, and more
-Ribbon – client side load balancer
-Feign – declarative REST client
-Eureka – service registration and discovery
-Sleuth – distributed tracing via logs
-Zipkin – distributed tracing system with request visualization.
+Zuul –  gateway service that provides dynamic routing, monitoring, resiliency, security, and more 
+Ribbon – client side load balancer 
+Feign – declarative REST client 
+Eureka – service registration and discovery 
+Sleuth – distributed tracing via logs 
+Zipkin – distributed tracing system with request visualization. 
 
 
 
