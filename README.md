@@ -33,11 +33,14 @@ eureka:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
 
-Eureka: http://localhost:8761/eureka/
+Eureka: http://localhost:8761 
 
 Zuul: http://localhost:8762/routes
 
-Request: http://localhost:8762/spring-cloud-eureka-client/greeting
+Request: http://localhost:8762/spring-cloud-eureka-client/greeting 
+
+http://localhost:8762/foreign-exchange-service/currency-exchange/from/EUR/to/INR 
+
 
 --> Thinkings:
 
