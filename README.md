@@ -5,9 +5,12 @@ Spring boot and cloud configurations, microservices
 
 https://howtodoinjava.com/spring/spring-cloud/spring-cloud-config-server-git/ --> Thanks!
 
-http://localhost:8080/msg 
-http://localhost:8888/config-server-client/development 
-http://localhost:8888/config-server-client/production 
+http://localhost:8080/msg
+
+http://localhost:8888/config-server-client/development
+
+http://localhost:8888/config-server-client/production
+
 http://localhost:8080/refresh --> POST 
 
 example local repo files, see springboot-configs\config-server-repo
