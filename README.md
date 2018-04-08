@@ -73,10 +73,3 @@ Sleuth – distributed tracing via logs
 
 Zipkin – distributed tracing system with request visualization
 
-
-
-
-
-
-
-

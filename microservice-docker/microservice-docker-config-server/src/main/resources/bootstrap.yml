@@ -1,0 +1,13 @@
+server:
+  port: 9090
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:///C:/git-local-repo/microservice-docker-config-server
+  profiles:
+    active: native
+management:
+  security:
+    enabled: false
