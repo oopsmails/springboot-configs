@@ -14,7 +14,7 @@ security:
     enabled: false
   oauth2:
     client:
-      client-id: demo
+      client-id: demops
       client-secret: demo
       access-token-uri: ${auth-server}/oauth/token
       user-authorization-uri: ${auth-server}/oauth/authorize

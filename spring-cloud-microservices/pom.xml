@@ -27,6 +27,8 @@
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <spring-cloud.version>Dalston.SR2</spring-cloud.version>
         <spring-security-oauth2.version>2.0.10.RELEASE</spring-security-oauth2.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
+        <commons-io.version>2.4</commons-io.version>
     </properties>
 
     <dependencyManagement>
@@ -45,6 +47,17 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
 
         </dependencies>

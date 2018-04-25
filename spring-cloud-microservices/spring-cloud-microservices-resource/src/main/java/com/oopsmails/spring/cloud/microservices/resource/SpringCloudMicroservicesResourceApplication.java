@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.apache.catalina.filters.RequestDumperFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,12 +26,41 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableEurekaClient
 @RestController
 public class SpringCloudMicroservicesResourceApplication extends ResourceServerConfigurerAdapter {
+
     final List<Message> messages = Collections.synchronizedList(new LinkedList<>());
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringCloudMicroservicesResourceApplication.class, args);
+    }
 
     @GetMapping(path = "api/messages")
     List<Message> getMessages(Principal principal) {
+        if (messages.isEmpty()) {
+            Message message = new Message();
+            message.username = "defaultForTesting";
+            message.text = "message for test";
+            message.createdAt = LocalDateTime.now();
+            messages.add(message);
+        }
         return messages;
     }
+
+    // @formatter:off
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/api/**")
+                .access("#oauth2.hasScope('read')")
+
+                .antMatchers(HttpMethod.POST, "/api/**")
+                .access("#oauth2.hasScope('write')")
+
+                .antMatchers("/employee").hasRole("ADMIN"); // testing
+    }
+    // @formatter:on
 
     @PostMapping(path = "api/messages")
     Message postMessage(Principal principal, @RequestBody Message message) {
@@ -42,29 +70,16 @@ public class SpringCloudMicroservicesResourceApplication extends ResourceServerC
         return message;
     }
 
-    public static class Message {
-        public String text;
-        public String username;
-        public LocalDateTime createdAt;
-    }
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/**").access("#oauth2.hasScope('read')")
-                .antMatchers(HttpMethod.POST, "/api/**").access("#oauth2.hasScope('write')");
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(SpringCloudMicroservicesResourceApplication.class, args);
-    }
-
     @Profile("!cloud")
     @Bean
     RequestDumperFilter requestDumperFilter() {
         return new RequestDumperFilter();
+    }
+
+    public static class Message {
+
+        public String text;
+        public String username;
+        public LocalDateTime createdAt;
     }
 }
