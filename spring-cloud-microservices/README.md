@@ -79,15 +79,89 @@ http://localhost:4204/ john/123
 
 ================================================
 
+Read http://www.baeldung.com/rest-api-spring-oauth2-angularjs again.
+
+@EnableAuthorizationServer
+--> In order to persist the tokens, use a JdbcTokenStore, then sharing the SQL backed token store even though the 
+Authorization and Resource servers are separate applications. The reason, of course, is that the Resource Server 
+needs to be able to check the validity of the access tokens issued by the Authorization Server.
+
+--> Instead of using a TokenStore in our Resource Server, we can use RemoteTokeServices:
+e.g.
+
+@Primary
+@Bean
+public RemoteTokenServices tokenService() {
+    RemoteTokenServices tokenService = new RemoteTokenServices();
+    tokenService.setCheckTokenEndpointUrl(
+      "http://localhost:8080/spring-security-oauth-server/oauth/check_token");
+    tokenService.setClientId("fooClientIdPassword");
+    tokenService.setClientSecret("secret");
+    return tokenService;
+}
+
+Note that:
+
+This RemoteTokenService will use CheckTokenEndPoint on Authorization Server to validate AccessToken and obtain Authentication object from it.
+The can be found at AuthorizationServerBaseURL +”/oauth/check_token“
+The Authorization Server can use any TokenStore type [JdbcTokenStore, JwtTokenStore, …] – this won’t affect the RemoteTokenService or Resource server.
+
+--> Resource server,
+
+- @PreAuthorize("#oauth2.hasScope('read')") to guard controller endpoint.
+
+- We also need to enable global method security and configure MethodSecurityExpressionHandler:
+@Configuration
+@EnableResourceServer
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class OAuth2ResourceServerConfig 
+  extends GlobalMethodSecurityConfiguration {
+ 
+    @Override
+    protected MethodSecurityExpressionHandler createExpressionHandler() {
+        return new OAuth2MethodSecurityExpressionHandler();
+    }
+}
+
+
+
+================================================
+
 Angular Frontend:
 
-Read http://www.baeldung.com/rest-api-spring-oauth2-angularjs again.
+
+-->  Front End – Implicit Grant
+
+. Using the angular-oauth2-oidc directive to obtain the Access Token.
+e.g,
+import { OAuthService } from 'angular-oauth2-oidc';
+import { Cookie } from 'ng2-cookies';
+
+. Note how, after obtaining the Access Token, we’re using it via the Authorization header whenever we consume protected 
+resources from within the Resource Server.
+
 
 
 spring-cloud-oauth-ui-implicit
 
 The form login configuration isn’t necessary for the Password flow – only for the Implicit flow – so you may be able 
 to skip it depending on what OAuth2 flow you’re using.
+
+
+--> Front end – Password Flow
+
+Note that:
+
+. To get an Access Token we send a POST to the “/oauth/token” endpoint
+. We’re using the client credentials and Basic Auth to hit this endpoint
+. We’re then sending the user credentials along with the client id and grant type parameters URL encoded
+. After we obtain the Access Token – we store it in a cookie
+
+The cookie storage is especially important here, because we’re only using the cookie for storage purposes and not to 
+drive the authentication process directly. This helps protect against cross-site request forgery (CSRF) type of 
+attacks and vulnerabilities.
+
+
 
 spring-security-oauth-ui-password:
 
@@ -96,6 +170,7 @@ spring-security-oauth-ui-password:
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 ??? .formLogin().permitAll()
 
+::> In order to use the “password” grant type we need to wire in and use the AuthenticationManager bean
 ::> using default spring security AuthenticationManager, Bearer token like: ef0bb9aa-8b5c-4dfe-93f3-b808e0e65039
 
 
