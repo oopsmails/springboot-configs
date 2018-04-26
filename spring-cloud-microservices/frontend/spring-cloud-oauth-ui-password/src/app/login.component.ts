@@ -22,7 +22,7 @@ import { AppService } from './app.service';
     </div>`
 })
 export class LoginComponent {
-    public loginData = { username: 'user', password: 'password' };
+    public loginData = { username: 'john', password: '123' };
 
     constructor(private _service: AppService) { }
 

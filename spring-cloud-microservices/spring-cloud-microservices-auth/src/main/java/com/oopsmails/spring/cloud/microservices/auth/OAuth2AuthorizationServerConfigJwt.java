@@ -1,5 +1,6 @@
 package com.oopsmails.spring.cloud.microservices.auth;
 
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +21,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
-import java.util.Arrays;
-
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfigurerAdapter {
@@ -38,6 +37,7 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
 
     @Override
     public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {
+        // @formatter:off
         clients.inMemory()
                 .withClient("sampleClientId")
                 .authorizedGrantTypes("implicit")
@@ -64,14 +64,12 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
                 // 1 hour
                 .refreshTokenValiditySeconds(2592000) // 30 days
 
-                // @formatter:on
                 .and()
                 .withClient("demo")
                 .authorizedGrantTypes("implicit")
                 .scopes("read", "write", "foo", "bar")
                 .autoApprove(true)
                 .accessTokenValiditySeconds(3600)
-                // @formatter:off
 
                 .and()
                 .withClient("demops")
@@ -82,6 +80,7 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
                 // 1 hour
                 .refreshTokenValiditySeconds(2592000)
         ;
+        // @formatter:on
     }
 
     @Bean
@@ -102,10 +101,14 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
                 .authenticationManager(authenticationManager);
     }
 
+    // @formatter:off
     @Bean
     public TokenStore tokenStore() {
+//        return new JdbcTokenStore(dataSource);
+//        return new InMemoryTokenStore();
         return new JwtTokenStore(accessTokenConverter());
     }
+    // @formatter:on
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {

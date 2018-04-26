@@ -34,38 +34,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
+        http.authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/oauth/token/revokeById/**").permitAll()
+                .antMatchers("/tokens/**").permitAll()
+                .antMatchers("/", "/login", "/oauth/authorize", "/oauth/confirm_access").permitAll() // added
+                .anyRequest().authenticated()
 
-        http
+                .and()
                 .formLogin().loginPage("/login").permitAll()
+
                 .and()
-                .requestMatchers()
-                .antMatchers("/", "/login", "/oauth/authorize", "/oauth/confirm_access")
-                .and()
-                .authorizeRequests()
-                .anyRequest().authenticated();
-
-//		http.authorizeRequests()
-//			.antMatchers("/login").permitAll()
-//			.antMatchers("/oauth/token/revokeById/**").permitAll()
-//			.antMatchers("/tokens/**").permitAll()
-//			.antMatchers("/", "/login", "/oauth/authorize", "/oauth/confirm_access").permitAll() // added
-//			.anyRequest().authenticated()
-//
-//			.and()
-//			.formLogin().loginPage("/login").permitAll()
-//
-//			.and()
-//			.csrf().disable();
-
-
-        // @formatter:off
-//		http.formLogin().loginPage("/login").permitAll()
-//			.and()
-//			.requestMatchers()
-//			.antMatchers("/", "/login", "/oauth/authorize", "/oauth/confirm_access")
-//			.and()
-//			.authorizeRequests()
-//			.anyRequest().authenticated();
+                .csrf().disable();
         // @formatter:on
     }
 
